@@ -44,22 +44,30 @@ int main(void) {
     if(curl) {
         struct curl_slist *headers = NULL;
         headers = curl_slist_append(headers, "Content-Type: application/json");
-        headers = curl_slist_append(headers, "Authorization: Bearer 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");
+        headers = curl_slist_append(headers, "Authorization: Bearer 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");
 
         curl_easy_setopt(curl, CURLOPT_URL, "https://api.openai.com/v1/chat/completions");
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 
         while(1) {
-            char input[MAX_INPUT_SIZE];
-            printf("Enter your message: ");
-            fgets(input, MAX_INPUT_SIZE, stdin);
-            
-	    
-	    input[strcspn(input, "\n")] = 0; // remove trailing newline
-		
-	    if (strcmp(input, "exit") == 0) {
-            return 0;
-        	}
+		char input[MAX_INPUT_SIZE];
+
+    		FILE *file = fopen("input.txt", "r");
+    		if (file == NULL) {
+        		printf("Could not open file 'input.txt'\n");
+        		return 1;
+    		}
+
+    		while(fgets(input, MAX_INPUT_SIZE, file)) {
+        	input[strcspn(input, "\n")] = 0; // remove trailing newline
+    		printf("work\n");
+		}
+
+    		fclose(file);
+
+    		if (strcmp(input, "exit") == 0) {
+        		return 0;
+    		}
 
             char data[MAX_INPUT_SIZE + 200]; // extra space for JSON formatting
 	    snprintf(data, sizeof(data), "{\"model\":\"gpt-3.5-turbo\", \"messages\":[{\"role\":\"system\", \"content\":\"ChatGPT session\"}, {\"role\":\"user\", \"content\":\"%s\"}]}", input);
@@ -80,11 +88,21 @@ int main(void) {
 	    cJSON *firstChoice = cJSON_GetArrayItem(choices, 0);
 	    cJSON *message = cJSON_GetObjectItemCaseSensitive(firstChoice, "message");
 	    cJSON *content = cJSON_GetObjectItemCaseSensitive(message, "content");
+	    
+   	    FILE *out_file = fopen("output.txt", "a");
+		if (file == NULL) {
+    		printf("Could not open file 'output.txt'\n");
+    		return 1;
+		}
 
-	    printf("Content: %s\n", content->valuestring);
+		fprintf(out_file, "Content: %s\n", content->valuestring);
+		fclose(out_file);
+
+	    //printf("Content: %s\n", content->valuestring);
 	    cJSON_Delete(root);
 	    //printf("%s\n", s.ptr);
             free(s.ptr);
+	    return 0;
         }
 
         curl_easy_cleanup(curl);
