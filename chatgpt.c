@@ -44,7 +44,7 @@ int main(void) {
     if(curl) {
         struct curl_slist *headers = NULL;
         headers = curl_slist_append(headers, "Content-Type: application/json");
-        headers = curl_slist_append(headers, "Authorization: Bearer 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");
+        headers = curl_slist_append(headers, "Authorization: Bearer API_KEY");
 
         curl_easy_setopt(curl, CURLOPT_URL, "https://api.openai.com/v1/chat/completions");
         curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
