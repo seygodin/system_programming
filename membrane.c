@@ -150,6 +150,7 @@ void input_Question(char* buffer){
     }
 }
 
+/*
 // temp main : 이 부분은 키패드를 활용한 코드를 만들 때 대략 이런 flow를 따라야 한다는 예시이다.
 // 실제 사용시에는 주석처리해 컴파일 에러가 안나도록 해야 한다.
 int main(){
@@ -183,3 +184,4 @@ int main(){
 
     return 0;
 }
+*/

@@ -5,24 +5,31 @@
 #include <unistd.h>
 #include <string.h>
 
+// need to use membrane.c
+#include <wiringPi.h>
+#include "membrane.h"
+
 int main() {
     int clientSocket, bytesRead;
     struct sockaddr_in serverAddress;
-    char buffer[1024];
+    // char buffer[1024]; // original code
 
-    // Å¬¶óÀÌ¾ğÆ® ¼ÒÄÏ »ı¼º
+    // init gpio
+    init_keypad();
+
+    // í´ë¼ì´ì–¸íŠ¸ ì†Œì¼“ ìƒì„±
     clientSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (clientSocket == -1) {
         perror("Failed to create socket");
         exit(1);
     }
 
-    // ¼­¹ö ÁÖ¼Ò ¼³Á¤
+    // ì„œë²„ ì£¼ì†Œ ì„¤ì •
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(12345);
     serverAddress.sin_addr.s_addr = inet_addr("192.168.54.49");
 
-    // ¼­¹ö¿¡ ¿¬°á
+    // ì„œë²„ì— ì—°ê²°
     if (connect(clientSocket, (struct sockaddr*)&serverAddress, sizeof(serverAddress)) < 0) {
         perror("Failed to connect to server");
         exit(1);
@@ -30,18 +37,22 @@ int main() {
 
     printf("Connected to server\n");
 
-    // ¼­¹ö¿ÍÀÇ Åë½Å ½ÃÀÛ
+    // ì„œë²„ì™€ì˜ í†µì‹  ì‹œì‘
     while (1) {
-        // ¼­¹ö·Î µ¥ÀÌÅÍ ¼Û½Å
+
+        char* buffer = (char *)malloc(sizeof(char) * 1024);
+
+        // ì„œë²„ë¡œ ë°ì´í„° ì†¡ì‹ 
         printf("Client: ");
-        fgets(buffer, sizeof(buffer), stdin);
+        // fgets(buffer, sizeof(buffer), stdin); // original code
+        input_Question(buffer);
 
         if (write(clientSocket, buffer, strlen(buffer)) < 0) {
             perror("Failed to write to socket");
             break;
         }
 
-        // ¼­¹ö·ÎºÎÅÍ µ¥ÀÌÅÍ ¼ö½Å
+        // ì„œë²„ë¡œë¶€í„° ë°ì´í„° ìˆ˜ì‹ 
         memset(buffer, 0, sizeof(buffer));
         bytesRead = read(clientSocket, buffer, sizeof(buffer));
         if (bytesRead < 0) {
@@ -51,13 +62,16 @@ int main() {
 
         printf("Server: %s\n", buffer);
 
-        // Á¾·á Ä¿¸Çµå È®ÀÎ
+        // ì¢…ë£Œ ì»¤ë§¨ë“œ í™•ì¸
         if (strcmp(buffer, "exit\n") == 0) {
             break;
         }
+
+        // for safe, free the buffer
+        free(buffer);
     }
 
-    // ¼ÒÄÏ Á¾·á
+     // ì†Œì¼“ ì¢…ë£Œ
     close(clientSocket);
 
     return 0;
