@@ -47,6 +47,7 @@ gcc -o server final_version/gpt_com.c -lcurl -lcjson
 ```
 
 **5. Run program**
+
 Server Rasberry Pi
 
 ```shell
