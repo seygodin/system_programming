@@ -9,4 +9,8 @@ $ cd LCD-show
 
 $ sudo ./LCD35-show
 ```
+
+ChatGPT Call Module
+```shell
+gcc -o server final_version/gpt_com.c -lcurl -lcjson
 ```
