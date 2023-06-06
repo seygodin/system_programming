@@ -51,10 +51,10 @@ Server Rasberry Pi
 
 ```shell
 ./server
-'''
+```
 
 Client Rasberry Pi
 
 ```shell
 ./client
-'''
+```
