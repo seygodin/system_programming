@@ -46,7 +46,7 @@ gcc -Wall -o client client.c membrane.c -lwiringPi
 
 **4. Compile ChatGPT Call Module**
 
-Run this code on server rasberry pi.
+Run this code on server rasberry pi. You must put your own GPT api key to YOUR_API_KEY of final_version/gpt_com.c (line 97).
 ```shell
 gcc -o server final_version/gpt_com.c -lcurl -lcjson
 ```
