@@ -1,4 +1,8 @@
-# system_programming
+# Let’s Cheat Final Exam using ChatGPT
+
+This is usage for using this program. You need two rasberry pi. And we used one display for rasberry pi*. Following paragraph introduces the usage of of our project
+
+*https://www.devicemart.co.kr/goods/view?no=1376592
 
 **Display Output Module**
 
